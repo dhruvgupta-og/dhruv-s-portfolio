@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dhruv Gupta | Full-Stack Software Engineer &amp; Co-Founder of Zappit</title>
+  
+  <!-- Broadsheet & Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  
+  <!-- Matter.js Physics Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
+
+  <style>
+    /* -------------------------------------------------------------
+       HIGH-TASTE EDITORIAL BROADSHEET (100% SELF-CONTAINED CSS)
+       ------------------------------------------------------------- */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --paper-bg: #F9F8F6;
+      --paper-surface: #FFFFFF;
+      --paper-border: #18181B;
+      --paper-subtle: #E4E1DA;
+      --ink-black: #18181B;
+      --ink-muted: #52525B;
+      --ink-indigo: #0F4C64;
+      --ink-crimson: #991B1B;
+      --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'Space Mono', 'SFMono-Regular', Consolas, monospace;
+    }
+
+    html, body {
+      background-color: var(--paper-bg);
+      color: var(--ink-black);
+      font-family: var(--font-sans);
+      scroll-behavior: smooth;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z' fill='%2318181B' stroke='%23F9F8F6' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='4' cy='4' r='1.5' fill='%23991B1B'/%3E%3C/svg%3E") 3 3, default;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Interactive Elements: Custom Editorial Crosshair Reticle */
+    a, button, [role="button"], input[type="submit"], input[type="button"], select, .cursor-pointer, .card {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Ccircle cx='14' cy='14' r='11' fill='none' stroke='%23991B1B' stroke-width='1.5' stroke-dasharray='3 2'/%3E%3Ccircle cx='14' cy='14' r='3.5' fill='%23991B1B'/%3E%3Cline x1='14' y1='2' x2='14' y2='6' stroke='%23991B1B' stroke-width='1.5'/%3E%3Cline x1='14' y1='22' x2='14' y2='26' stroke='%23991B1B' stroke-width='1.5'/%3E%3Cline x1='2' y1='14' x2='6' y2='14' stroke='%23991B1B' stroke-width='1.5'/%3E%3Cline x1='22' y1='14' x2='26' y2='14' stroke='%23991B1B' stroke-width='1.5'/%3E%3C/svg%3E") 14 14, pointer !important;
+    }
+
+    /* Draggable Bodies (Zero-G Physics) */
+    .physics-body {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='8' fill='%2318181B' fill-opacity='0.15' stroke='%2318181B' stroke-width='1.5' stroke-dasharray='2 2'/%3E%3Ccircle cx='12' cy='12' r='3' fill='%23991B1B'/%3E%3C/svg%3E") 12 12, grab !important;
+    }
+    .physics-body:active {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='8' fill='%23991B1B' stroke='%2318181B' stroke-width='2'/%3E%3Ccircle cx='12' cy='12' r='2' fill='%23FFFFFF'/%3E%3C/svg%3E") 12 12, grabbing !important;
+    }
+
+    /* Linotype Text Input */
+    input[type="text"], input[type="email"], textarea {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='24' viewBox='0 0 16 24'%3E%3Cline x1='4' y1='2' x2='12' y2='2' stroke='%2318181B' stroke-width='1.5'/%3E%3Cline x1='8' y1='2' x2='8' y2='22' stroke='%2318181B' stroke-width='1.5'/%3E%3Cline x1='4' y1='22' x2='12' y2='22' stroke='%2318181B' stroke-width='1.5'/%3E%3C/svg%3E") 8 12, text !important;
+    }
+
+    /* Smooth Floating Follower */
+    #editorial-cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      background-color: var(--ink-black);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: background-color 0.15s, transform 0.1s;
+    }
+    #editorial-cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 28px;
+      height: 28px;
+      border: 1px solid rgba(24, 24, 27, 0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translate(-50%, -50%);
+      transition: width 0.15s, height 0.15s, border-color 0.15s, background-color 0.15s;
+    }
+    #editorial-cursor-ring.is-hover {
+      width: 42px;
+      height: 42px;
+      border: 2px solid var(--ink-crimson);
+      background-color: rgba(153, 27, 27, 0.08);
+    }
+    #editorial-cursor-ring.is-card {
+      width: 60px;
+      height: 60px;
+      background-color: var(--ink-black);
+      border-color: var(--ink-black);
+      color: #fff;
+    }
+
+    /* Typography */
+    .font-serif { font-family: var(--font-serif); }
+    .font-sans { font-family: var(--font-sans); }
+    .font-mono { font-family: var(--font-mono); }
+
+    /* Layout Containers */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Rules & Borders */
+    .border-ink { border: 1px solid var(--ink-black); }
+    .border-b-ink { border-bottom: 1px solid var(--ink-black); }
+    .border-t-ink { border-top: 1px solid var(--ink-black); }
+    .border-subtle { border: 1px solid var(--paper-subtle); }
+    .border-b-subtle { border-bottom: 1px solid var(--paper-subtle); }
+
+    /* Grid Layouts */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 992px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Cards */
+    .card {
+      background-color: var(--paper-surface);
+      border: 2px solid var(--ink-black);
+      padding: 1.5rem;
+      box-shadow: 3px 3px 0px var(--ink-black);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 5px 5px 0px var(--ink-black);
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background-color: var(--ink-black);
+      color: #fff;
+      border: 1px solid var(--ink-black);
+      padding: 0.5rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-primary:hover {
+      background-color: var(--ink-indigo);
+      border-color: var(--ink-indigo);
+    }
+
+    .btn-secondary {
+      background-color: var(--paper-surface);
+      color: var(--ink-black);
+      border: 1px solid var(--ink-black);
+      padding: 0.5rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-secondary:hover {
+      background-color: #F0EDE6;
+    }
+
+    .btn-crimson {
+      background-color: var(--ink-crimson);
+      color: #fff;
+      border: 1px solid var(--ink-black);
+      padding: 0.5rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+    }
+    .btn-crimson:hover {
+      background-color: var(--ink-black);
+    }
+
+    /* Floating Dock */
+    .dock {
+      position: fixed;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(249, 248, 246, 0.95);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--ink-black);
+      box-shadow: 3px 3px 0px var(--ink-black);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      z-index: 100;
+      border-radius: 2px;
+    }
+
+    /* Zero-G Physics Bodies */
+    #zero-g-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 90;
+      overflow: hidden;
+    }
+    .physics-body {
+      position: absolute;
+      pointer-events: auto;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    }
+    .physics-body:active {
+      cursor: grabbing;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(24, 24, 27, 0.65);
+      backdrop-filter: blur(3px);
+      z-index: 150;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-box {
+      background: var(--paper-bg);
+      border: 2px solid var(--ink-black);
+      box-shadow: 6px 6px 0px var(--ink-black);
+      max-width: 640px;
+      width: 100%;
+      padding: 2rem;
+      position: relative;
+    }
+
+    /* Icons */
+    .icon {
+      display: inline-block;
+      vertical-align: middle;
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================= -->
+  <!-- 1. TOP STATUS TICKER STRIP                                -->
+  <!-- ========================================================= -->
+  <aside style="background-color: var(--ink-black); color: #fff; padding: 0.45rem 1.25rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;">
+    <div class="container flex-between" style="gap: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 700; color: #fff;">
+          <span style="display: inline-block; width: 6px; height: 6px; background-color: var(--ink-crimson); border-radius: 50%;"></span>
+          DHRUV GUPTA
+        </span>
+        <span style="color: #71717A;">·</span>
+        <span style="color: #A1A1AA;">FULL-STACK SOFTWARE ENGINEER &amp; CO-FOUNDER AT ZAPPIT</span>
+      </div>
+      <div>
+        <button onclick="copyEmail()" style="background: none; border: none; color: #E4E1DA; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;">
+          <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          <span id="ticker-email">dhruvedition@gmail.com</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================= -->
+  <!-- 2. MASTHEAD HEADER                                        -->
+  <!-- ========================================================= -->
+  <header style="border-bottom: 1px solid var(--ink-black); padding: 1.75rem 0 1rem 0;">
+    <div class="container">
+      
+      <!-- Dateline -->
+      <div class="flex-between border-b-subtle" style="padding-bottom: 0.5rem; margin-bottom: 1rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-muted); letter-spacing: 0.08em; text-transform: uppercase;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span>ESTABLISHED 2024</span>
+          <span>•</span>
+          <span style="color: var(--ink-crimson); font-weight: 700;">GWALIOR, M.P., INDIA</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="color: var(--ink-indigo); font-weight: 700;">SDE CANDIDATE PIPELINE</span>
+          <span>•</span>
+          <span>SUMMER / FALL 2025</span>
+        </div>
+      </div>
+
+      <!-- Masthead Banner -->
+      <div style="text-align: center; position: relative; padding: 0.5rem 0 1.25rem 0;">
+        <p style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.25em; color: var(--ink-indigo); text-transform: uppercase; margin-bottom: 0.25rem;">
+          An Editorial Engineering Portfolio
+        </p>
+        <h1 class="font-serif" style="font-size: clamp(2.5rem, 5.5vw, 5rem); font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; line-height: 1;">
+          The Gupta Gazette
+        </h1>
+        <p style="font-style: italic; color: var(--ink-muted); font-size: 0.95rem; margin-top: 0.5rem;">
+          “Scalable Web Platforms · Real-Time Campus Systems · Algorithmic Rigor”
+        </p>
+        <div style="position: absolute; right: 0; top: 0; display: inline-block; border: 1px solid var(--ink-crimson); color: var(--ink-crimson); font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.4rem; text-transform: uppercase;">
+          SDE CANDIDATE '25
+        </div>
+      </div>
+
+      <!-- Navigation Bar -->
+      <nav class="flex-between border-t-ink border-b-ink" style="padding: 0.6rem 0; gap: 0.75rem;">
+        <div style="display: flex; flex-wrap: wrap; gap: 1.25rem; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+          <a href="#lead-profile" style="color: var(--ink-crimson); text-decoration: none;">§ Profile</a>
+          <a href="#systems" style="color: var(--ink-black); text-decoration: none;">§ Production Systems</a>
+          <a href="#arsenal" style="color: var(--ink-black); text-decoration: none;">§ Technical Arsenal</a>
+          <a href="#education" style="color: var(--ink-black); text-decoration: none;">§ Education</a>
+          <a href="#contact" style="color: var(--ink-black); text-decoration: none;">§ Inquiries</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.4rem;">
+          <a href="https://github.com/dhruvgupta-og" target="_blank" class="btn-secondary" style="padding: 0.25rem 0.5rem;">
+            <svg class="icon" viewBox="0 0 24 24"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+            GitHub
+          </a>
+          <a href="https://leetcode.com/u/dhruvhereyo/" target="_blank" class="btn-secondary" style="padding: 0.25rem 0.5rem;">
+            <svg class="icon" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            LeetCode
+          </a>
+          <a href="https://linkedin.com/in/dhruv-hereyo0" target="_blank" class="btn-secondary" style="padding: 0.25rem 0.5rem;">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+            LinkedIn
+          </a>
+          <button onclick="toggleGravity()" id="nav-gravity-btn" class="btn-crimson" style="padding: 0.25rem 0.6rem;">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+            <span id="nav-gravity-text">ZERO-G MODE</span>
+          </button>
+        </div>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- ========================================================= -->
+  <!-- 3. HERO & CANDIDATE DOSSIER                               -->
+  <!-- ========================================================= -->
+  <main class="container" style="padding-top: 2.5rem; padding-bottom: 4rem;">
+    
+    <section id="lead-profile" class="hero-grid" style="margin-bottom: 3.5rem; border-bottom: 1px solid var(--ink-black); padding-bottom: 3rem;">
+      
+      <!-- Left Column: Candidate Admission Ticket Stub -->
+      <aside>
+        <div class="card" id="phys-ticket-stub" onclick="openModal('ticket')">
+          <div class="flex-between" style="border-bottom: 1px dashed var(--ink-black); padding-bottom: 0.5rem; margin-bottom: 0.75rem; font-family: var(--font-mono); font-size: 0.68rem;">
+            <span style="color: var(--ink-crimson); font-weight: 700;">CANDIDATE ADMISSION STUB</span>
+            <span style="color: #fff; background-color: var(--ink-black); padding: 0.1rem 0.35rem; font-weight: 700;">PASS 2025</span>
+          </div>
+
+          <div style="text-align: center; margin-bottom: 1rem;">
+            <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-indigo); font-weight: 700; text-transform: uppercase;">Full-Stack Software Engineer</span>
+            <h2 class="font-serif" style="font-size: 1.75rem; font-weight: 900; margin: 0.2rem 0; text-transform: uppercase;">Dhruv Gupta</h2>
+            <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-crimson); font-weight: 700;">CO-FOUNDER AT ZAPPIT</p>
+            <p style="font-size: 0.78rem; color: var(--ink-muted); margin-top: 0.25rem;">ITM Gwalior · B.Tech CSE (2024–2028)</p>
+          </div>
+
+          <div style="background-color: var(--paper-bg); border: 1px solid var(--paper-subtle); padding: 0.75rem; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.7; margin-bottom: 1rem;">
+            <div class="flex-between"><span>PRODUCTION SYSTEMS:</span><strong style="background:#F0EDE6; padding:0 0.3rem;">3 LIVE APPS</strong></div>
+            <div class="flex-between"><span>STUDENT REACH:</span><strong style="color: var(--ink-crimson);">10,000+ USERS</strong></div>
+            <div class="flex-between"><span>CORE TECH:</span><strong style="color: var(--ink-indigo);">REACT · NODE · FIREBASE</strong></div>
+            <div class="flex-between"><span>ALGORITHMIC DSA:</span><strong>C++ (LEETCODE)</strong></div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <button onclick="copyEmail()" class="btn-primary" style="justify-content: center; width: 100%;">
+              <span>COPY CANDIDATE EMAIL</span>
+            </button>
+            <a href="https://github.com/dhruvgupta-og" target="_blank" class="btn-secondary" style="justify-content: center; width: 100%;">
+              <span>INSPECT GITHUB REPOSITORIES</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Column: Lead Article -->
+      <article style="border-left: 1px solid var(--ink-black); padding-left: 2rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; color: var(--ink-crimson); font-weight: 700;">
+          <span>FOUNDER ARCHITECTURE // CANDIDATE DOSSIER</span>
+          <span style="color: #A1A1AA;">·</span>
+          <span style="color: var(--ink-muted);">SUMMER / FALL 2025</span>
+        </div>
+
+        <h2 class="font-serif" style="font-size: clamp(1.85rem, 3.2vw, 2.75rem); font-weight: 900; line-height: 1.15; margin-bottom: 0.75rem;">
+          Campus Startup Founder &amp; Full-Stack Architect Building High-Utility Software Systems
+        </h2>
+
+        <p style="font-size: 1rem; line-height: 1.65; color: #27272A; margin-bottom: 1rem;">
+          <strong class="font-serif" style="font-size: 1.25rem; color: var(--ink-indigo);">GWALIOR, M.P. — </strong>
+          I am a full-stack engineer and co-founder of <strong>Zappit</strong> (<code>zappit.shop</code>), where I architected and deployed a live campus food delivery platform serving university students and merchants in real time. My engineering focus combines reactive frontend development and distributed cloud databases with rigorous Data Structures &amp; Algorithms in C++.
+        </p>
+
+        <p style="font-size: 0.95rem; line-height: 1.6; color: var(--ink-muted); margin-bottom: 1.25rem;">
+          Beyond Zappit, I built and scaled <strong>RGPV Resources</strong> (<code>rgpvpaper.in</code>), an academic exam repository that has served over <strong>10,000+ engineering students</strong>. I care deeply about building software that eliminates real friction—with clean architecture, sub-150ms latency, and thoughtful human ergonomics.
+        </p>
+
+        <!-- Pull Quote -->
+        <blockquote style="border-left: 2px solid var(--ink-crimson); padding: 0.85rem 1.25rem; margin: 1.25rem 0; background-color: var(--paper-surface); border-top: 1px solid var(--paper-subtle); border-right: 1px solid var(--paper-subtle); border-bottom: 1px solid var(--paper-subtle); font-style: italic; font-size: 1.05rem; line-height: 1.5;">
+          “Good software engineering isn't about buzzwords—it's about understanding real user bottlenecks, designing resilient data contracts, and delivering sub-150ms reliability under load.”
+          <cite style="display: block; font-family: var(--font-mono); font-size: 0.7rem; font-style: normal; color: var(--ink-muted); margin-top: 0.5rem; text-transform: uppercase;">
+            — Dhruv Gupta, Co-Founder at Zappit
+          </cite>
+        </blockquote>
+
+        <!-- Primary Skill Chips -->
+        <div style="border-top: 1px solid var(--paper-subtle); padding-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+          <span style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; color: var(--ink-muted); text-transform: uppercase;">CORE ARSENAL:</span>
+          <span class="btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">C++ (DSA)</span>
+          <span class="btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">REACT.JS &amp; NEXT.JS</span>
+          <span class="btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">FIREBASE FIRESTORE</span>
+          <span class="btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.7rem; color: var(--ink-indigo);">NODE.JS &amp; EXPRESS</span>
+          <span class="btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.7rem; color: var(--ink-crimson);">SYSTEM DESIGN</span>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- 4. FEATURED SYSTEMS (3 PRODUCTION PROJECTS)               -->
+    <!-- ========================================================= -->
+    <section id="systems" style="margin-bottom: 3.5rem; border-bottom: 1px solid var(--ink-black); padding-bottom: 3rem;">
+      <div class="flex-between border-t-ink border-b-ink" style="padding: 0.6rem 0; margin-bottom: 1.75rem;">
+        <span style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; color: var(--ink-crimson); text-transform: uppercase;">
+          SECTION II: PRODUCTION SYSTEMS &amp; LIVE PLATFORMS
+        </span>
+        <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-muted);">3 VERIFIED ARCHITECTURES</span>
+      </div>
+
+      <div class="projects-grid">
+        
+        <!-- Project 1: Zappit -->
+        <div class="card" id="phys-project-zappit" onclick="openModal('zappit')">
+          <div class="flex-between" style="border-bottom: 1px solid var(--paper-subtle); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+            <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-crimson); font-weight: 700; text-transform: uppercase;">FLAGSHIP STARTUP</span>
+            <span style="font-family: var(--font-mono); font-size: 0.65rem; background-color: var(--ink-indigo); color: #fff; padding: 0.1rem 0.35rem; font-weight: 700;">LIVE AT ZAPPIT.SHOP</span>
+          </div>
+          <h3 class="font-serif" style="font-size: 1.35rem; font-weight: 900; margin-bottom: 0.4rem;">Zappit — Food Delivery</h3>
+          <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 1rem; line-height: 1.5;">
+            Hyper-local campus ordering engine connecting university students directly with campus dining merchants in real time.
+          </p>
+          <ul style="list-style-type: none; font-size: 0.8rem; line-height: 1.5; margin-bottom: 1.25rem; color: #27272A; border-top: 1px solid var(--paper-subtle); padding-top: 0.75rem;">
+            <li style="margin-bottom: 0.4rem;">✓ Real-time cart &amp; sub-150ms order queue via Firebase Firestore.</li>
+            <li style="margin-bottom: 0.4rem;">✓ Multi-store architecture with zero-lag cafe kitchen display terminal.</li>
+            <li>✓ Role-based access control protecting student orders and merchant inventory.</li>
+          </ul>
+          <div style="display: flex; gap: 0.5rem; border-top: 1px solid var(--paper-subtle); padding-top: 0.75rem;">
+            <a href="https://zappit.shop" target="_blank" onclick="event.stopPropagation()" class="btn-primary" style="padding: 0.35rem 0.65rem;">
+              <span>Visit zappit.shop</span>
+              <svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+            </a>
+            <button class="btn-secondary" style="padding: 0.35rem 0.65rem;">Architecture Spec</button>
+          </div>
+        </div>
+
+        <!-- Project 2: Codexa -->
+        <div class="card" id="phys-project-codexa" onclick="openModal('codexa')">
+          <div class="flex-between" style="border-bottom: 1px solid var(--paper-subtle); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+            <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-indigo); font-weight: 700; text-transform: uppercase;">DEVELOPER TOOLING</span>
+            <span style="font-family: var(--font-mono); font-size: 0.65rem; border: 1px solid var(--ink-crimson); color: var(--ink-crimson); padding: 0.1rem 0.35rem; font-weight: 700;">84% DSA BENCHMARK</span>
+          </div>
+          <h3 class="font-serif" style="font-size: 1.35rem; font-weight: 900; margin-bottom: 0.4rem;">Codexa — Placement Tracker</h3>
+          <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 1rem; line-height: 1.5;">
+            Interactive developer dashboard engineered to structure algorithmic problem-solving routines and track interview readiness.
+          </p>
+          <ul style="list-style-type: none; font-size: 0.8rem; line-height: 1.5; margin-bottom: 1.25rem; color: #27272A; border-top: 1px solid var(--paper-subtle); padding-top: 0.75rem;">
+            <li style="margin-bottom: 0.4rem;">✓ Visualized mastery across Arrays, Trees, Graphs, DP, and System Design.</li>
+            <li style="margin-bottom: 0.4rem;">✓ Spaced repetition intervals flagging complex LeetCode problems.</li>
+            <li>✓ Clean local persistence engine with zero slow external dependencies.</li>
+          </ul>
+          <div style="display: flex; gap: 0.5rem; border-top: 1px solid var(--paper-subtle); padding-top: 0.75rem;">
+            <a href="https://github.com/dhruvgupta-og" target="_blank" onclick="event.stopPropagation()" class="btn-primary" style="padding: 0.35rem 0.65rem;">
+              <span>GitHub Repo</span>
+            </a>
+            <button class="btn-secondary" style="padding: 0.35rem 0.65rem;">Architecture Spec</button>
+          </div>
+        </div>
+
+        <!-- Project 3: RGPV Resources -->
+        <div class="card" id="phys-project-rgpv" onclick="openModal('rgpv')">
+          <div class="flex-between" style="border-bottom: 1px solid var(--paper-subtle); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+            <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-crimson); font-weight: 700; text-transform: uppercase;">ACADEMIC PLATFORM</span>
+            <span style="font-family: var(--font-mono); font-size: 0.65rem; background-color: var(--ink-crimson); color: #fff; padding: 0.1rem 0.35rem; font-weight: 700;">10,000+ USERS</span>
+          </div>
+          <h3 class="font-serif" style="font-size: 1.35rem; font-weight: 900; margin-bottom: 0.4rem;">RGPV Resources Hub</h3>
+          <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 1rem; line-height: 1.5;">
+            High-traffic academic repository providing semester-wise curricula, vetted professor notes, and previous year question papers.
+          </p>
+          <ul style="list-style-type: none; font-size: 0.8rem; line-height: 1.5; margin-bottom: 1.25rem; color: #27272A; border-top: 1px solid var(--paper-subtle); padding-top: 0.75rem;">
+            <li style="margin-bottom: 0.4rem;">✓ Over 10,000+ collegiate students served across engineering semesters.</li>
+            <li style="margin-bottom: 0.4rem;">✓ Hierarchical Firestore schema reducing read operations by 70%.</li>
+            <li>✓ Firebase Auth RBAC securing vetted professor and admin syllabus uploads.</li>
+          </ul>
+          <div style="display: flex; gap: 0.5rem; border-top: 1px solid var(--paper-subtle); padding-top: 0.75rem;">
+            <a href="https://rgpvpaper.in" target="_blank" onclick="event.stopPropagation()" class="btn-primary" style="padding: 0.35rem 0.65rem;">
+              <span>Visit rgpvpaper.in</span>
+              <svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+            </a>
+            <button class="btn-secondary" style="padding: 0.35rem 0.65rem;">Architecture Spec</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- 5. TECHNICAL ARSENAL (4 CLEAN LAYERS)                     -->
+    <!-- ========================================================= -->
+    <section id="arsenal" style="margin-bottom: 3.5rem; border-bottom: 1px solid var(--ink-black); padding-bottom: 3rem;">
+      <div class="flex-between border-t-ink border-b-ink" style="padding: 0.6rem 0; margin-bottom: 1.75rem;">
+        <span style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; color: var(--ink-indigo); text-transform: uppercase;">
+          SECTION III: TECHNICAL ARSENAL &amp; COMPETENCIES
+        </span>
+        <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-muted);">INDEXED BY SYSTEM LAYER</span>
+      </div>
+
+      <div class="skills-grid">
+        
+        <div class="card" style="padding: 1.25rem;">
+          <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-crimson); font-weight: 700; text-transform: uppercase;">LAYER 01 //</span>
+          <h4 class="font-serif" style="font-size: 1.2rem; font-weight: 900; margin: 0.25rem 0 0.75rem 0;">Languages</h4>
+          <div style="font-size: 0.8rem; line-height: 1.6;">
+            <div><strong>C++</strong> <span style="font-size:0.75rem; color:var(--ink-crimson);">(Primary DSA)</span></div>
+            <div><strong>JavaScript</strong> <span style="font-size:0.75rem; color:var(--ink-muted);">(ES6+, Async)</span></div>
+            <div><strong>TypeScript</strong> <span style="font-size:0.75rem; color:var(--ink-muted);">(Types, Contracts)</span></div>
+            <div><strong>Python</strong> <span style="font-size:0.75rem; color:var(--ink-muted);">(Scripting)</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 1.25rem;">
+          <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-indigo); font-weight: 700; text-transform: uppercase;">LAYER 02 //</span>
+          <h4 class="font-serif" style="font-size: 1.2rem; font-weight: 900; margin: 0.25rem 0 0.75rem 0;">Frontend</h4>
+          <div style="font-size: 0.8rem; line-height: 1.6;">
+            <div><strong>React.js</strong> <span style="font-size:0.75rem; color:var(--ink-muted);">(Hooks, Context)</span></div>
+            <div><strong>Next.js</strong> <span style="font-size:0.75rem; color:var(--ink-muted);">(App Router, SSR)</span></div>
+            <div><strong>Tailwind CSS</strong> <span style="font-size:0.75rem; color:var(--ink-muted);">(Design Systems)</span></div>
+            <div><strong>HTML5 &amp; CSS3</strong> <span style="font-size:0.75rem; color:var(--ink-muted);">(Semantic Grid)</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 1.25rem;">
+          <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-crimson); font-weight: 700; text-transform: uppercase;">LAYER 03 //</span>
+          <h4 class="font-serif" style="font-size: 1.2rem; font-weight: 900; margin: 0.25rem 0 0.75rem 0;">Backend &amp; Cloud</h4>
+          <div style="font-size: 0.8rem; line-height: 1.6;">
+            <div><strong>Node.js &amp; Express</strong> <span style="font-size:0.75rem; color:var(--ink-muted);">(REST APIs)</span></div>
+            <div><strong>Firebase Firestore</strong> <span style="font-size:0.75rem; color:var(--ink-indigo);">(Real-time Sync)</span></div>
+            <div><strong>Firebase Auth</strong> <span style="font-size:0.75rem; color:var(--ink-muted);">(RBAC Security)</span></div>
+            <div><strong>PostgreSQL &amp; MongoDB</strong> <span style="font-size:0.75rem; color:var(--ink-muted);">(ACID / NoSQL)</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 1.25rem;">
+          <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-indigo); font-weight: 700; text-transform: uppercase;">LAYER 04 //</span>
+          <h4 class="font-serif" style="font-size: 1.2rem; font-weight: 900; margin: 0.25rem 0 0.75rem 0;">CS Fundamentals</h4>
+          <div style="font-size: 0.8rem; line-height: 1.6;">
+            <div><strong>Data Structures &amp; Algorithms</strong></div>
+            <div><strong>Object-Oriented Design (OOP)</strong></div>
+            <div><strong>DBMS &amp; SQL Query Design</strong></div>
+            <div><strong>Git &amp; GitHub Version Control</strong></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- 6. ACADEMIC CREDENTIALS                                   -->
+    <!-- ========================================================= -->
+    <section id="education" style="margin-bottom: 3.5rem; border-bottom: 1px solid var(--ink-black); padding-bottom: 3rem;">
+      <div class="flex-between border-t-ink border-b-ink" style="padding: 0.6rem 0; margin-bottom: 1.75rem;">
+        <span style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; color: var(--ink-crimson); text-transform: uppercase;">
+          SECTION IV: ACADEMIC CREDENTIALS
+        </span>
+        <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-muted);">INSTITUTIONAL RECORD</span>
+      </div>
+
+      <div class="card flex-between" style="gap: 1.5rem;">
+        <div style="max-width: 700px;">
+          <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-indigo); font-weight: 700; text-transform: uppercase;">
+            UNDERGRADUATE DEGREE PROGRAM
+          </span>
+          <h3 class="font-serif" style="font-size: 1.45rem; font-weight: 900; margin-top: 0.25rem;">
+            ITM Gwalior — B.Tech in Computer Science &amp; Engineering
+          </h3>
+          <p style="font-size: 0.85rem; color: var(--ink-muted); margin-top: 0.25rem;">
+            Gwalior, Madhya Pradesh, India · Period: 2024 — 2028 (Expected)
+          </p>
+          <p style="font-size: 0.82rem; margin-top: 0.5rem; color: #27272A;">
+            Coursework in Data Structures &amp; Algorithms, Object-Oriented Programming, Database Management Systems, Computer Networks, and Operating Systems.
+          </p>
+        </div>
+        <div style="text-align: right; border-left: 1px solid var(--ink-black); padding-left: 1.5rem;">
+          <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-crimson); font-weight: 700; text-transform: uppercase; display: block;">STATUS</span>
+          <strong style="font-family: var(--font-mono); font-size: 0.85rem; display: block; margin-top: 0.2rem;">ACTIVE SDE CANDIDATE</strong>
+          <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-muted); display: block; margin-top: 0.2rem;">SUMMER / FALL 2025</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- 7. DIRECT INQUIRIES & CONTACT                             -->
+    <!-- ========================================================= -->
+    <section id="contact" style="margin-bottom: 4rem;">
+      <div class="flex-between border-t-ink border-b-ink" style="padding: 0.6rem 0; margin-bottom: 1.75rem;">
+        <span style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; color: var(--ink-indigo); text-transform: uppercase;">
+          SECTION V: INQUIRIES &amp; DIRECT TRANSMISSION
+        </span>
+        <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-muted);">OPEN FOR INTERNSHIPS</span>
+      </div>
+
+      <div class="contact-grid">
+        
+        <!-- Channels -->
+        <div class="card flex-between" style="flex-direction: column; align-items: stretch;">
+          <div>
+            <h4 class="font-serif" style="font-size: 1.4rem; font-weight: 900; margin-bottom: 0.4rem;">
+              Direct Communication Channels
+            </h4>
+            <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 1.25rem;">
+              Available for Software Development Engineer (SDE) internships for Summer and Fall 2025. Contact me directly or view my verified profiles:
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.78rem;">
+              <div class="flex-between border-b-subtle" style="padding-bottom: 0.5rem;">
+                <span style="color: var(--ink-muted);">EMAIL:</span>
+                <button onclick="copyEmail()" style="background: none; border: none; font-family: var(--font-mono); font-weight: 700; color: var(--ink-crimson); cursor: pointer; text-decoration: underline;">
+                  dhruvedition@gmail.com
+                </button>
+              </div>
+              <div class="flex-between border-b-subtle" style="padding-bottom: 0.5rem;">
+                <span style="color: var(--ink-muted);">GITHUB:</span>
+                <a href="https://github.com/dhruvgupta-og" target="_blank" style="color: var(--ink-indigo); font-weight: 700; text-decoration: none;">@dhruvgupta-og ↗</a>
+              </div>
+              <div class="flex-between border-b-subtle" style="padding-bottom: 0.5rem;">
+                <span style="color: var(--ink-muted);">LEETCODE:</span>
+                <a href="https://leetcode.com/u/dhruvhereyo/" target="_blank" style="color: var(--ink-indigo); font-weight: 700; text-decoration: none;">@dhruvhereyo ↗</a>
+              </div>
+              <div class="flex-between">
+                <span style="color: var(--ink-muted);">LINKEDIN:</span>
+                <a href="https://linkedin.com/in/dhruv-hereyo0" target="_blank" style="color: var(--ink-indigo); font-weight: 700; text-decoration: none;">/in/dhruv-hereyo0 ↗</a>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <button onclick="copyEmail()" class="btn-crimson" id="btn-copy" style="width: 100%; justify-content: center;">
+              <span>COPY EMAIL ADDRESS</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="card">
+          <h4 class="font-serif" style="font-size: 1.4rem; font-weight: 900; margin-bottom: 0.4rem;">
+            Send Direct Message
+          </h4>
+          <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 1rem;">
+            Have a question or role inquiry? Submit a note and I will reply promptly.
+          </p>
+
+          <form onsubmit="handleFormSubmit(event)" style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div>
+              <label style="display: block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.25rem;">Your Name / Organization</label>
+              <input type="text" required placeholder="e.g. Technical Recruiter" style="width: 100%; padding: 0.55rem; font-family: var(--font-mono); font-size: 0.8rem; background-color: var(--paper-bg); border: 1px solid var(--ink-black);"/>
+            </div>
+            <div>
+              <label style="display: block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.25rem;">Your Email Address</label>
+              <input type="email" required placeholder="recruiter@company.com" style="width: 100%; padding: 0.55rem; font-family: var(--font-mono); font-size: 0.8rem; background-color: var(--paper-bg); border: 1px solid var(--ink-black);"/>
+            </div>
+            <div>
+              <label style="display: block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.25rem;">Message</label>
+              <textarea rows="3" required placeholder="Regarding SDE intern opportunities for Summer 2025..." style="width: 100%; padding: 0.55rem; font-family: var(--font-mono); font-size: 0.8rem; background-color: var(--paper-bg); border: 1px solid var(--ink-black);"></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="justify-content: center; margin-top: 0.25rem;">
+              <span>TRANSMIT MESSAGE</span>
+            </button>
+          </form>
+          <div id="form-receipt" class="hidden" style="margin-top: 0.75rem; padding: 0.5rem; background-color: #ECFDF5; border: 1px solid #059669; font-family: var(--font-mono); font-size: 0.72rem; color: #065F46; text-align: center;">
+            ✓ Message logged. Dhruv will respond promptly!
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================= -->
+  <!-- 8. FOOTER                                                 -->
+  <!-- ========================================================= -->
+  <footer style="border-top: 1px solid var(--ink-black); padding: 2rem 0 5rem 0; background-color: #F0EDE6; text-align: center; font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-muted);">
+    <div class="container">
+      <div style="font-weight: 700; color: var(--ink-black); margin-bottom: 0.25rem;">THE GUPTA GAZETTE · DHRUV GUPTA</div>
+      <div>B.Tech Computer Science &amp; Engineering · ITM Gwalior (2024–2028)</div>
+      <div style="margin-top: 0.5rem; color: var(--ink-crimson); font-weight: 700;">CAMPUS CO-FOUNDER &amp; FULL-STACK ARCHITECT</div>
+    </div>
+  </footer>
+
+  <!-- ========================================================= -->
+  <!-- 9. FLOATING BOTTOM DOCK                                   -->
+  <!-- ========================================================= -->
+  <div class="dock">
+    <button onclick="toggleGravity()" id="dock-gravity-btn" class="btn-crimson" style="padding: 0.35rem 0.65rem;">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+      <span id="dock-gravity-text">ZERO-G PHYSICS</span>
+    </button>
+    <button onclick="toggleAudio()" id="dock-audio-btn" class="btn-secondary" style="padding: 0.35rem 0.65rem;">
+      <span id="audio-status">AUDIO</span>
+    </button>
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="btn-secondary" style="padding: 0.35rem 0.5rem;" title="Back to Top">
+      <svg class="icon" viewBox="0 0 24 24"><line x1="12" x2="12" y1="19" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+    </button>
+  </div>
+
+  <!-- Zero-G Physics Container -->
+  <div id="zero-g-container" class="hidden"></div>
+
+  <!-- Modal Overlay -->
+  <div id="inspect-modal" class="modal-backdrop hidden" onclick="if(event.target === this) closeModal()">
+    <div class="modal-box">
+      <div class="flex-between border-b-ink" style="padding-bottom: 0.5rem; margin-bottom: 1rem;">
+        <span id="modal-stamp" style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; border: 1px solid var(--ink-crimson); color: var(--ink-crimson); padding: 0.15rem 0.4rem; text-transform: uppercase;">
+          SYSTEM SPEC
+        </span>
+        <button onclick="closeModal()" style="background: none; border: none; font-size: 1.25rem; font-weight: 900; cursor: pointer; color: var(--ink-black);">✕</button>
+      </div>
+      <h3 id="modal-title" class="font-serif" style="font-size: 1.6rem; font-weight: 900; margin-bottom: 0.4rem;">System Spec</h3>
+      <p id="modal-desc" style="font-size: 0.88rem; color: var(--ink-muted); margin-bottom: 1rem; line-height: 1.5;"></p>
+      <div id="modal-body" style="font-size: 0.85rem; line-height: 1.6; margin-bottom: 1.5rem;"></div>
+      <div style="text-align: right;">
+        <button onclick="closeModal()" class="btn-primary">CLOSE DOSSIER</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- 10. JAVASCRIPT: AUDIO & ZERO-G PHYSICS ENGINE             -->
+  <!-- ========================================================= -->
+  <script>
+    // 1. Audio Engine
+    let audioCtx = null;
+    let isMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playClick() {
+      if (isMuted) return;
+      initAudio();
+      if (!audioCtx) return;
+      const t = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(1400, t);
+      osc.frequency.exponentialRampToValueAtTime(120, t + 0.03);
+      gain.gain.setValueAtTime(0.1, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.035);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.04);
+    }
+
+    function toggleAudio() {
+      isMuted = !isMuted;
+      document.getElementById('audio-status').innerText = isMuted ? 'MUTED' : 'AUDIO';
+      if (!isMuted) playClick();
+    }
+
+    // 2. Email Copy Handler
+    function copyEmail() {
+      playClick();
+      navigator.clipboard.writeText('dhruvedition@gmail.com');
+      const ticker = document.getElementById('ticker-email');
+      const copyBtn = document.getElementById('btn-copy');
+      if (ticker) ticker.innerText = 'COPIED TO CLIPBOARD!';
+      if (copyBtn) copyBtn.innerText = 'COPIED TO CLIPBOARD!';
+      setTimeout(() => {
+        if (ticker) ticker.innerText = 'dhruvedition@gmail.com';
+        if (copyBtn) copyBtn.innerText = 'COPY EMAIL ADDRESS';
+      }, 2500);
+    }
+
+    // 3. Form Submission
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      playClick();
+      const receipt = document.getElementById('form-receipt');
+      if (receipt) receipt.classList.remove('hidden');
+      e.target.reset();
+      setTimeout(() => {
+        if (receipt) receipt.classList.add('hidden');
+      }, 6000);
+    }
+
+    // 4. Modal Engine
+    const modalDetails = {
+      zappit: {
+        stamp: 'LIVE IN PRODUCTION',
+        title: 'Zappit — Campus Food Delivery Platform',
+        desc: 'Hyper-local ordering engine connecting university students directly with campus dining merchants in real time.',
+        body: '<div style="background:#fff;border:1px solid #E4E1DA;padding:0.75rem;margin-bottom:0.75rem;font-family:var(--font-mono);font-size:0.75rem;"><strong>LIVE URL:</strong> <a href="https://zappit.shop" target="_blank" style="color:var(--ink-indigo);font-weight:700;">zappit.shop ↗</a><br/><strong>STACK:</strong> React.js, Firebase Firestore, Express.js, Tailwind CSS<br/><strong>LATENCY:</strong> &lt;150ms real-time event sync via Firestore snapshot listeners</div><p>• <strong>The Problem:</strong> University canteens suffer severe congestion during brief 15-minute lecture breaks, leaving students waiting in 20-minute physical queues and merchants losing track of orders.</p><p style="margin-top:0.4rem;">• <strong>The Solution:</strong> Real-time Firestore order pipeline connecting student mobile carts directly to cafe kitchen display screens with sub-150ms latency.</p>'
+      },
+      codexa: {
+        stamp: '84% BENCHMARK MET',
+        title: 'Codexa — Placement Preparation Tracker',
+        desc: 'Interactive developer dashboard engineered to structure algorithmic problem-solving routines and track interview readiness.',
+        body: '<div style="background:#fff;border:1px solid #E4E1DA;padding:0.75rem;margin-bottom:0.75rem;font-family:var(--font-mono);font-size:0.75rem;"><strong>GITHUB:</strong> <a href="https://github.com/dhruvgupta-og" target="_blank" style="color:var(--ink-indigo);font-weight:700;">@dhruvgupta-og ↗</a><br/><strong>COVERAGE:</strong> Arrays, Trees, Graphs, Dynamic Programming, System Design<br/><strong>BENCHMARK:</strong> 84% syllabus readiness achieved</div><p>• <strong>Retention Logic:</strong> Spaced repetition intervals flagging complex LeetCode problems when review retention expires.</p><p style="margin-top:0.4rem;">• <strong>Zero Friction:</strong> Clean, high-density dashboard built for daily engineering study habits without bloated boilerplate.</p>'
+      },
+      rgpv: {
+        stamp: '10,000+ USERS',
+        title: 'RGPV Resources — Academic Examination Hub',
+        desc: 'Centralized engineering study engine serving over 10,000+ collegiate students across semesters.',
+        body: '<div style="background:#fff;border:1px solid #E4E1DA;padding:0.75rem;margin-bottom:0.75rem;font-family:var(--font-mono);font-size:0.75rem;"><strong>LIVE PORTAL:</strong> <a href="https://rgpvpaper.in" target="_blank" style="color:var(--ink-indigo);font-weight:700;">rgpvpaper.in ↗</a><br/><strong>STUDENT VISITS:</strong> 10,000+ Unique engineering students served<br/><strong>STORAGE SCHEMA:</strong> Hierarchical NoSQL reducing queries by 70%</div><p>• <strong>Tangible Impact:</strong> Provides semester-wise university curricula, professor lecture notes, and verified question papers.</p><p style="margin-top:0.4rem;">• <strong>RBAC Security:</strong> Enforces Firebase Auth role-based permissions to isolate student downloads from verified syllabus uploads.</p>'
+      },
+      ticket: {
+        stamp: 'CANDIDATE PASS',
+        title: 'Dhruv Gupta — SDE Intern Candidate',
+        desc: 'Official candidate profile for Summer / Fall 2025 hiring pipelines.',
+        body: '<div style="background:#fff;border:1px solid #E4E1DA;padding:0.75rem;margin-bottom:0.75rem;font-family:var(--font-mono);font-size:0.75rem;"><strong>DEGREE:</strong> B.Tech Computer Science & Engineering (2024–2028)<br/><strong>COLLEGE:</strong> ITM Gwalior, Madhya Pradesh, India<br/><strong>EMAIL:</strong> dhruvedition@gmail.com</div><p>• Co-founder of Zappit (zappit.shop) with 3+ live production web applications.</p><p style="margin-top:0.4rem;">• Daily problem-solving in C++ Data Structures & Algorithms on LeetCode.</p>'
+      }
+    };
+
+    function openModal(key) {
+      playClick();
+      const data = modalDetails[key] || modalDetails['ticket'];
+      document.getElementById('modal-stamp').innerText = data.stamp;
+      document.getElementById('modal-title').innerText = data.title;
+      document.getElementById('modal-desc').innerText = data.desc;
+      document.getElementById('modal-body').innerHTML = data.body;
+      document.getElementById('inspect-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      playClick();
+      document.getElementById('inspect-modal').classList.add('hidden');
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // 5. Zero-Gravity Physics Simulation
+    let isZeroG = false;
+    let matterEngine = null;
+    let physicsBodies = [];
+    let mouseX = -1000, mouseY = -1000;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function toggleGravity() {
+      if (!isZeroG) startZeroG();
+      else stopZeroG();
+    }
+
+    function startZeroG() {
+      if (typeof Matter === 'undefined') {
+        alert('Physics engine is initializing...');
+        return;
+      }
+      playClick();
+      isZeroG = true;
+      document.getElementById('nav-gravity-text').innerText = 'RESET GRID';
+      document.getElementById('dock-gravity-text').innerText = 'RESET GRID';
+
+      const container = document.getElementById('zero-g-container');
+      container.classList.remove('hidden');
+      container.innerHTML = '';
+
+      const { Engine, Bodies, Composite, Body } = Matter;
+      matterEngine = Engine.create({
+        gravity: { x: 0, y: -0.012, scale: 0.001 }
+      });
+
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      const wallOpts = { isStatic: true, restitution: 0.85 };
+      Composite.add(matterEngine.world, [
+        Bodies.rectangle(vw/2, vh + 50, vw*2, 100, wallOpts),
+        Bodies.rectangle(vw/2, -50, vw*2, 100, wallOpts),
+        Bodies.rectangle(-50, vh/2, 100, vh*2, wallOpts),
+        Bodies.rectangle(vw + 50, vh/2, 100, vh*2, wallOpts)
+      ]);
+
+      const floatingItems = [
+        { id: 'zappit', w: 280, h: 160, html: '<div class="card" style="padding:1rem;"><span style="font-family:var(--font-mono);font-size:0.6rem;background:var(--ink-indigo);color:#fff;padding:0.1rem 0.3rem;font-weight:700;">ZAPPIT.SHOP</span><h4 class="font-serif" style="font-size:1.1rem;margin:0.25rem 0;">Zappit Platform</h4><p style="font-size:0.75rem;color:var(--ink-muted);">Live Campus Food Delivery Engine</p></div>' },
+        { id: 'codexa', w: 260, h: 150, html: '<div class="card" style="padding:1rem;"><span style="font-family:var(--font-mono);font-size:0.6rem;border:1px solid var(--ink-crimson);color:var(--ink-crimson);padding:0.1rem 0.3rem;font-weight:700;">84% DSA</span><h4 class="font-serif" style="font-size:1.1rem;margin:0.25rem 0;">Codexa Tracker</h4><p style="font-size:0.75rem;color:var(--ink-muted);">Algorithmic Milestone Dashboard</p></div>' },
+        { id: 'rgpv', w: 260, h: 150, html: '<div class="card" style="padding:1rem;"><span style="font-family:var(--font-mono);font-size:0.6rem;background:var(--ink-crimson);color:#fff;padding:0.1rem 0.3rem;font-weight:700;">10K+ REACH</span><h4 class="font-serif" style="font-size:1.1rem;margin:0.25rem 0;">RGPV Resources</h4><p style="font-size:0.75rem;color:var(--ink-muted);">Academic Exam Prep Hub</p></div>' },
+        { id: 'cpp', w: 160, h: 50, html: '<div class="btn-primary" style="width:100%;justify-content:center;">C++ DSA PRIMARY</div>' },
+        { id: 'react', w: 160, h: 50, html: '<div class="btn-secondary" style="width:100%;justify-content:center;">REACT.JS &amp; NEXT</div>' },
+        { id: 'firebase', w: 180, h: 50, html: '<div class="btn-crimson" style="width:100%;justify-content:center;">FIREBASE FIRESTORE</div>' }
+      ];
+
+      physicsBodies = [];
+
+      floatingItems.forEach((item, idx) => {
+        const dom = document.createElement('div');
+        dom.className = 'physics-body';
+        dom.style.width = item.w + 'px';
+        dom.innerHTML = item.html;
+        container.appendChild(dom);
+
+        const initX = 100 + (idx % 3) * ((vw - 240) / 2.5);
+        const initY = 120 + Math.floor(idx / 3) * 180;
+
+        const body = Bodies.rectangle(initX, initY, item.w, item.h, {
+          restitution: 0.8,
+          frictionAir: 0.02,
+          density: 0.001
+        });
+
+        Body.setVelocity(body, {
+          x: (Math.random() - 0.5) * 2.5,
+          y: -1 - Math.random() * 2
+        });
+        Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.03);
+
+        Composite.add(matterEngine.world, body);
+
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        let moved = false;
+
+        dom.addEventListener('pointerdown', (ev) => {
+          playClick();
+          isDragging = true;
+          moved = false;
+          startX = ev.clientX;
+          startY = ev.clientY;
+          const pos = { ...body.position };
+
+          function onPointerMove(mv) {
+            const dx = mv.clientX - startX;
+            const dy = mv.clientY - startY;
+            if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
+            Body.setPosition(body, { x: pos.x + dx, y: pos.y + dy });
+            Body.setVelocity(body, { x: (mv.clientX - startX) * 0.08, y: (mv.clientY - startY) * 0.08 });
+          }
+
+          function onPointerUp() {
+            window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('pointerup', onPointerUp);
+            isDragging = false;
+            if (!moved) {
+              if (item.id === 'zappit' || item.id === 'codexa' || item.id === 'rgpv') {
+                openModal(item.id);
+              }
+            }
+          }
+
+          window.addEventListener('pointermove', onPointerMove);
+          window.addEventListener('pointerup', onPointerUp);
+        });
+
+        physicsBodies.push({ body, dom, w: item.w, h: item.h });
+      });
+
+      let lastTime = performance.now();
+      function loop(now) {
+        if (!isZeroG) return;
+        const delta = Math.min(now - lastTime, 32);
+        lastTime = now;
+
+        Engine.update(matterEngine, delta);
+
+        physicsBodies.forEach(({ body, dom, w, h }) => {
+          const dx = body.position.x - mouseX;
+          const dy = body.position.y - mouseY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist > 0 && dist < 150) {
+            const force = (1 - dist / 150) * 0.003;
+            Body.applyForce(body, body.position, { x: (dx / dist) * force, y: (dy / dist) * force });
+          }
+
+          if (body.position.x < 50) Body.applyForce(body, body.position, { x: 0.002, y: 0 });
+          if (body.position.x > vw - 50) Body.applyForce(body, body.position, { x: -0.002, y: 0 });
+          if (body.position.y < 50) Body.applyForce(body, body.position, { x: 0, y: 0.002 });
+          if (body.position.y > vh - 50) Body.applyForce(body, body.position, { x: 0, y: -0.002 });
+
+          dom.style.transform = `translate3d(${body.position.x - w/2}px, ${body.position.y - h/2}px, 0px) rotate(${body.angle}rad)`;
+        });
+
+        requestAnimationFrame(loop);
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+    function stopZeroG() {
+      playClick();
+      isZeroG = false;
+      document.getElementById('nav-gravity-text').innerText = 'ZERO-G MODE';
+      document.getElementById('dock-gravity-text').innerText = 'ZERO-G PHYSICS';
+
+      const container = document.getElementById('zero-g-container');
+      container.classList.add('hidden');
+      container.innerHTML = '';
+
+      if (matterEngine) {
+        Matter.World.clear(matterEngine.world, false);
+        Matter.Engine.clear(matterEngine);
+        matterEngine = null;
+      }
+      physicsBodies = [];
+    }
+
+    // Interactive Editorial Follower Cursor for Desktop
+    (function() {
+      if (!window.matchMedia('(pointer: fine)').matches) return;
+      const dot = document.createElement('div');
+      dot.id = 'editorial-cursor-dot';
+      const ring = document.createElement('div');
+      ring.id = 'editorial-cursor-ring';
+      document.body.appendChild(dot);
+      document.body.appendChild(ring);
+
+      let targetX = -100, targetY = -100;
+      let ringX = -100, ringY = -100;
+
+      window.addEventListener('mousemove', (e) => {
+        targetX = e.clientX;
+        targetY = e.clientY;
+        dot.style.transform = `translate3d(${targetX}px, ${targetY}px, 0px) translate(-50%, -50%)`;
+
+        const target = e.target;
+        if (!target) return;
+        const interactive = target.closest('a, button, [role="button"], input, textarea, select, .cursor-pointer');
+        const card = target.closest('.card');
+
+        if (card && !interactive) {
+          ring.className = 'is-card';
+          ring.innerHTML = '<span style="font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:1px;">VIEW ↗</span>';
+        } else if (interactive) {
+          ring.className = 'is-hover';
+          ring.innerHTML = '';
+        } else {
+          ring.className = '';
+          ring.innerHTML = '';
+        }
+      });
+
+      function animLoop() {
+        ringX += (targetX - ringX) * 0.22;
+        ringY += (targetY - ringY) * 0.22;
+        ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0px) translate(-50%, -50%)`;
+        requestAnimationFrame(animLoop);
+      }
+      animLoop();
+    })();
+  </script>
+</body>
+</html>

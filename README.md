@@ -5,6 +5,7 @@
 [![Live Website](https://img.shields.io/badge/Production-Live-0F4C64?style=flat-square)](https://zappit.shop)
 [![Tech Stack](https://img.shields.io/badge/Stack-Next.js%20%7C%20React%20%7C%20Tailwind%20%7C%20Matter.js-18181B?style=flat-square)]()
 [![Academic](https://img.shields.io/badge/Degree-B.Tech%20CSE%20(2024--2028)-991B1B?style=flat-square)](https://itmuniversity.ac.in)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/dhruvgupta-og/dhruv-s-portfolio)
 
 ---
 
